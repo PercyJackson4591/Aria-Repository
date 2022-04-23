@@ -1,8 +1,10 @@
 from operator import truediv
 from pydoc import cli
+from turtle import title
 from types import MemberDescriptorType
 import discord
 from discord.ext import commands
+import os
 
 client = commands.Bot(command_prefix = '!')
 
@@ -10,13 +12,13 @@ client = commands.Bot(command_prefix = '!')
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.dnd, activity=discord.Game("!Aria"))
+    await client.change_presence(status=discord.Status.dnd, activity=discord.Game("Doing nothing"))
     print("Beepity Boopity Beep")
 
 @client.event
 async def on_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
-        await ctx.reply("You don't have the nessacery permmissions.")
+        pass
 
 @client.event
 async def on_command_error(ctx, error):
@@ -29,7 +31,7 @@ async def ping(ctx):
     await ctx.send(f'Ping is {round(client.latency * 1000)}ms')
 
 @client.command()
-@commands.has_permissions(read_message_history=True)
+@commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=5):
     await ctx.channel.purge (limit=amount)
 @clear.error
@@ -70,8 +72,14 @@ async def unban(ctx, *, member):
             return
 
 @client.command()
-async def Ariahelp(ctx):
-    embed = discord.Embed(title="ARIA commands help", description=f"If you have any problems please contact me through Modmail or DMs. \n \n **Note:**: This is not a public bot. \n \n **User commands** \n !help: Opens this window \n \n !ping: Tell you the latency of your commands. To be used if the bot won't respond to your commands. \n \n !clear: Clear the messages. Default amount: 5.  \n \n **Admin Commands** \n \n !ban: bans user. \n \n !kick: kicks the user. "  ,  colour=0x4dff4d)
+@commands.has_permissions(read_message_history=True)
+async def favortie_song(ctx):
+    embed = discord.Embed(title = "This is my creators favorite song", description = f"Click on the url to listen to the favortie song of my cerator", url= "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     await ctx.send(embed = embed)
 
-client.run('OTY3MDgyMDg3MjAxMDAxNDgy.YmLHYQ.CUmhRxLD2pOHixeKDywhXlLsTqs')
+@client.command()
+async def Ariahelp(ctx):
+    embed = discord.Embed(title="ARIA commands help", description=f"If you have any problems please contact me through Modmail or DMs. \n \n **Note:**: This is not a public bot. \n \n **User commands** \n !ahelp: Opens this window \n \n !ping: Tell you the latency of your commands. To be used if the bot won't respond to your commands. \n \n !clear: Clear the messages. Default amount: 5.  \n \n **Admin Commands** \n \n !ban: bans user. \n \n !unban: unbans the user. \n \n !kick: kicks the user. "  ,  colour=0x4dff4d)
+    await ctx.send(embed = embed)
+
+client.run(os.environ['BOT_TOKEN'])   
